@@ -1,7 +1,7 @@
 <Project>
 	<PropertyGroup>
 		<!-- Set this to where ever your ULTRAKILL folder is. -->
-		<ULTRAKILLPath>D:\Steam\steamapps\common\ULTRAKILL</ULTRAKILLPath>
+		<ULTRAKILLPath>C:\Program Files (x86)\Steam\steamapps\common\ULTRAKILL</ULTRAKILLPath>
 
 		<!-- You shouldn't need to touch these. If you do, ask me about it on discord @fredayddd321ewq -->
 		<ManagedPath>$(ULTRAKILLPath)\ULTRAKILL_Data\Managed</ManagedPath>
@@ -9,5 +9,13 @@
 
 		<!-- This is the path where the DLL is copied too, if you have it in a different folder or something then add the name of that folder onto here. -->
 		<CopyPath>$(PluginPath)</CopyPath>
+    
+    <!-- This is the path where the DLL is copied too, if you have it in a different folder or something then add the name of that folder onto here. -->
+    <PluginConfigPath>$(PluginPath)\PluginConfigurator\PluginConfigurator.dll</PluginConfigPath>
 	</PropertyGroup>
+
+  <ItemGroup>
+    <PathsToCheck Include="ULTRAKILLPath" Name="ULTRAKILL" />
+    <PathsToCheck Include="PluginConfigPath" Name="Plugin Configurator" />
+  </ItemGroup>
 </Project>

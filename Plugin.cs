@@ -7,6 +7,7 @@ using System.Reflection;
 using System.Reflection.Emit;
 
 /// <summary> miaow mrrrrp https://www.youtube.com/watch?v=p2_pHD230wY </summary>
+[BepInIncompatibility(PluginConfig.PluginInfo.PLUGIN_GUID)]
 [BepInPlugin("Bryan_-000-.NoMoreIntro", "NoMoreIntro", "1.0.0")]
 public class Plugin : BaseUnityPlugin
 {
