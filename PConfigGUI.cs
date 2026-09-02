@@ -35,7 +35,13 @@ public static class PConfigGUI
         ConfigHeader description = new(config.rootPanel, "The level to load into when the game starts.", 14);
         description.textColor = Color.gray;
 
-        StartScene.onValueChange += data => Plugin.StartScene.Value = data.value;
+        StartScene.onValueChange += data =>
+        {
+            if (Plugin.ValidSceneNames.Contains(data.value))
+                Plugin.StartScene.Value = data.value;
+            else
+                StartScene.value = Plugin.StartScene.Value;
+        };
     }
 
     public static Sprite GrabIcon()
