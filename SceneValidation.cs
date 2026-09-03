@@ -3,7 +3,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine.AddressableAssets;
-using UnityEngine.AddressableAssets.ResourceLocators;
 using UnityEngine.ResourceManagement.ResourceProviders;
 
 public static class SceneValidation
@@ -15,13 +14,12 @@ public static class SceneValidation
         {
             if (field == null)
             {
-                IResourceLocator MainAddressablesLocator = Addressables.ResourceLocators
-                    .FirstOrDefault(loc => loc.LocatorId == "AddressablesMainContentCatalog");
-
                 field = [..
-                    from key in MainAddressablesLocator.Keys
-                    where MainAddressablesLocator.Locate(key, typeof(SceneInstance), out _)
-                    select key.ToString()
+                    Addressables.ResourceLocators.SelectMany(locator =>
+                        from key in locator.Keys
+                        where locator.Locate(key, typeof(SceneInstance), out _)
+                        select key.ToString()
+                    )
                 ];
             }
 
@@ -31,22 +29,20 @@ public static class SceneValidation
 
     /// <summary> Checks if input is either an existing level (based on internal names) or a valid informal name for a level. </summary>
     public static bool IsSceneValid(string input) =>
-        isNumLevel(input) || (input.ToLower() is "sandbox" or "museum" or "cybergrind" or "cg") || SceneNames.Contains(input);
+        isNumLevel(input) || (input.ToLower() is "sandbox" or "museum" or "credits" or "cybergrind" or "cg") || SceneNames.Contains(input);
 
     /// <summary> Converts the informal names of levels to the internal names. </summary>
     public static string ConvertToInternal(string input, string Default = "Main Menu")
     {
         // check if the input is like '1-4' and convert it to 'Level 1-4'
         if (isNumLevel(input))
-        {
-            input = "Level " + input[0] + '-' + input[2];
-        }
+            input = "Level " + (input[0] + "-" + input[2]).ToUpper();
 
         input = input.ToLower() switch
         {
             "sandbox" => "uk_construct",
-            "museum" => "CreditsMuseum2",
             "cybergrind" or "cg" => "Endless",
+            "museum" or "credits" => "CreditsMuseum2",
             "tutorial" or "level 0-0" => "Tutorial",
             _ => input
         };
