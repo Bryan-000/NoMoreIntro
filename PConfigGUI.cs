@@ -1,7 +1,5 @@
 ﻿namespace NoMoreIntro;
 
-using BepInEx.Bootstrap;
-using PluginConfig;
 using PluginConfig.API;
 using PluginConfig.API.Decorators;
 using PluginConfig.API.Fields;
@@ -12,16 +10,6 @@ public static class PConfigGUI
 {
     public static PluginConfigurator config;
     public static StringField StartScene;
-
-    public static void SafeLoad()
-    {
-        try
-        {
-            if (Chainloader.PluginInfos.ContainsKey(PluginConfiguratorController.PLUGIN_GUID))
-                LoadConfig();
-        }
-        catch { }
-    }
 
     public static void LoadConfig()
     {

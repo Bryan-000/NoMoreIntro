@@ -1,6 +1,7 @@
 ﻿namespace NoMoreIntro;
 
 using BepInEx;
+using BepInEx.Bootstrap;
 using BepInEx.Configuration;
 using HarmonyLib;
 using PluginConfig;
@@ -16,13 +17,27 @@ public class Plugin : BaseUnityPlugin
 {
     public static ConfigEntry<string> StartScene;
 
+    public static void SafeLoad_PConfigGUI()
+    {
+        if (Chainloader.PluginInfos.ContainsKey(PluginConfiguratorController.PLUGIN_GUID))
+            PConfigGUI.LoadConfig();
+    }
+
     public void Awake()
     {
         StartScene = Config.Bind("Settings", "startscene", "Main Menu", "The level to load into when the game starts.");
         if (!SceneValidation.IsSceneValid(StartScene.Value))
             StartScene.Value = "Main Menu";
 
-        PConfigGUI.SafeLoad();
+        // we need to wrap a method which references PConfigGUI in a try catch since
+        // accessing PConfigGUI will run cause TypeLoadException's if PConfig isnt installed
+        // due to it having fields which are pconfig types
+        try
+        {
+            SafeLoad_PConfigGUI();
+        }
+        catch { }
+
         Harmony.CreateAndPatchAll(GetType(), "Bryan_-000-.NoMoreIntro");
     }
 
