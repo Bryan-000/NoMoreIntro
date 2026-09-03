@@ -14,6 +14,8 @@ public static class SceneValidation
         {
             if (field == null)
             {
+                Addressables.InitializeAsync().WaitForCompletion();
+
                 field = [..
                     Addressables.ResourceLocators.SelectMany(locator =>
                         from key in locator.Keys
