@@ -58,32 +58,34 @@ public static class SceneValidation
         return Default;
     }
 
+    public static readonly Dictionary<char, HashSet<char>> LevelNums = new()
+    {
+        ['0'] = ['0', '1', '2', '3', '4', '5', 'S', 'E'],
+
+        ['1'] = ['1', '2', '3', '4', 'S', 'E'],
+        ['2'] = ['1', '2', '3', '4', 'S'],
+        ['3'] = ['1', '2'],
+
+        ['4'] = ['1', '2', '3', '4', 'S'],
+        ['5'] = ['1', '2', '3', '4', 'S'],
+        ['6'] = ['1', '2'],
+
+        ['7'] = ['1', '2', '3', '4', 'S'],
+        ['8'] = ['1', '2', '3', '4'],
+
+        ['P'] = ['1', '2'],
+    };
+
     /// <summary> Checks if inputs such as '1 4' should be turned into 'Level 1-4'. </summary>
-    private static bool isNumLevel(string input)
+    public static bool isNumLevel(string input)
     {
         if (input.Length == 3 && (input[1] is '-' or ' '))
         {
             char Layer = char.ToUpper(input[0]);
             char Level = char.ToUpper(input[2]);
 
-            // `(uint)Level - '1' < 4` checks if Level is between 1 and 4 (or well 1, 2, 3, or 4)
-            if ((Layer is '0' && ((uint)Level - '0' <= 5 || Level is 'S' or 'E'))
-
-             || (Layer is '1' && ((uint)Level - '1' < 4 || Level is 'S' or 'E'))
-             || (Layer is '2' && ((uint)Level - '1' < 4 || Level is 'S'))
-             || (Layer is '3' && ((uint)Level - '1' < 2))
-
-             || (Layer is '4' && ((uint)Level - '1' < 4 || Level is 'S'))
-             || (Layer is '5' && ((uint)Level - '1' < 4 || Level is 'S'))
-             || (Layer is '6' && ((uint)Level - '1' < 2))
-
-             || (Layer is '7' && ((uint)Level - '1' < 4 || Level is 'S'))
-             || (Layer is '8' && ((uint)Level - '1' < 4))
-
-             || (Layer is 'P' && ((uint)Level - '1' < 2)))
-            {
+            if (LevelNums.TryGetValue(Layer, out var ValidLevels) && ValidLevels.Contains(Level))
                 return true;
-            }
         }
 
         return false;
