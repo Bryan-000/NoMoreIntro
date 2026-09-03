@@ -37,7 +37,7 @@ public static class PConfigGUI
 
         StartScene.onValueChange += data =>
         {
-            if (Plugin.ValidSceneNames.Contains(data.value))
+            if (SceneValidation.IsSceneValid(data.value))
                 Plugin.StartScene.Value = data.value;
             else
                 StartScene.value = Plugin.StartScene.Value;
